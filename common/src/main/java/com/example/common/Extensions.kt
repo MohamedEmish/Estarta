@@ -26,3 +26,11 @@ fun Context?.isOffline(): Boolean {
         else -> true
     }
 }
+
+fun String?.getListOfStrings(): List<String> {
+    return when {
+        this.isNullOrEmpty() -> listOf()
+        this.contains(",") -> this.split(",")
+        else -> listOf(this)
+    }
+}
