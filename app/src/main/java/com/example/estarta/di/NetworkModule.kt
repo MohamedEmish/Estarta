@@ -1,6 +1,6 @@
 package com.example.estarta.di
 
-import com.amosh.data.BuildConfig
+import com.example.data.BuildConfig
 import com.example.remote.api.ApiService
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
@@ -8,7 +8,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.internal.platform.Platform
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,10 +31,10 @@ object NetworkModule {
     @Provides
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
-        if (BuildConfig.DEBUG)
-            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        else
-            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.NONE
+        httpLoggingInterceptor.level = when {
+            BuildConfig.DEBUG -> HttpLoggingInterceptor.Level.BODY
+            else -> HttpLoggingInterceptor.Level.NONE
+        }
 
         return httpLoggingInterceptor
     }
@@ -76,7 +75,6 @@ object NetworkModule {
      */
     @Provides
     fun provideRetrofitTest(okHttpClient: OkHttpClient): Retrofit {
-        val contentType = "application/json".toMediaType()
         return Retrofit.Builder()
             .baseUrl("https://ey3f2y0nre.execute-api.us-east-1.amazonaws.com/")
             .client(okHttpClient)
@@ -89,7 +87,5 @@ object NetworkModule {
      */
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
+    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
 }

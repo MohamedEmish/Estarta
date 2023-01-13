@@ -23,7 +23,7 @@ android {
     }
 
     buildFeatures {
-        // Open view binding
+        dataBinding true
         viewBinding true
     }
 

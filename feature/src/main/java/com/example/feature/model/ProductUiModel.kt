@@ -8,4 +8,4 @@ data class ProductUiModel(
     val imageIds: List<String>,
     val imageUrls: List<String>,
     val imageUrlsThumbnails: List<String>,
-)
+): java.io.Serializable
